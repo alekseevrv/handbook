@@ -1,10 +1,44 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Главная</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="'Главная страницв'" />
+
+<div>
+    Страховые организации -
+        [<a th:href="@{/add-insurance}"> Добавить </a>]
+        [<a th:href="@{/}"> Поиск </a>]
+</div><br>
+
+<div th:if="${insurances.isEmpty()}">
+    Организации в справочнике отсутствуют
+</div>
+
+<div th:unless="${insurances.isEmpty()}">
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>ИНН</th>
+            <th>ОГРН</th>
+            <th>Наименование</th>
+            <th>Адрес</th>
+            <th></th>
+        </tr>
+        <tr th:each="insurance : ${insurances}">
+            <td th:text="${insurance.id}"></td>
+            <td th:text="${insurance.inn}"></td>
+            <td th:text="${insurance.ogrn}"></td>
+            <td th:text="${insurance.name}"></td>
+            <td th:text="${insurance.adres}"></td>
+            <td>
+                <a th:href="@{/delete-insurance/{id}(id=${insurance.id})}">Удалить</a>
+                <a th:href="@{/edit-insurance/{id}(id=${insurance.id})}">Редактировать</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
 </body>
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<div>
+    Редактирование страховой организации -
+        [<a th:href="@{/}"> Главная </a>]
+</div><br>
+
+<div>
+    <form method="post" th:action="@{/update-insurance/{id}(id=${insurance.id})}" th:object="${insurance}">
+
+        <input type="text" th:field="*{inn}" placeholder="ИНН">
+        <span th:if="${#fields.hasErrors('inn')}" th:errors="*{inn}"></span> <br><br>
+
+        <input type="text" th:field="*{ogrn}" placeholder="ОГРН">
+        <span th:if="${#fields.hasErrors('ogrn')}" th:errors="*{ogrn}"></span> <br><br>
+
+        <input type="text" th:field="*{name}" placeholder="Название организации">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span> <br><br>
+
+        <input type="text" th:field="*{adres}" placeholder="Адрес организации">
+        <span th:if="${#fields.hasErrors('adres')}" th:errors="*{adres}"></span> <br><br>
+
+        <input type="reset" value="Очистить">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+
+</body>
+</html>
