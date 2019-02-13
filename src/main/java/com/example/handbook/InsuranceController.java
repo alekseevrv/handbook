@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class InsuranceController {
@@ -36,9 +37,17 @@ public class InsuranceController {
     @PostMapping("/add-insurance")
     public String addInsuranceSave(
             @Valid Insurance insurance,
-            BindingResult result
+            BindingResult result,
+            Model model
     ) {
         if (result.hasErrors()) {
+            return "addInsurance";
+        }
+
+        if(checkUnique(insurance)) {
+            model.addAttribute(
+                    "errorUnique",
+                    "Поля ИНН, ОГРН и название организации должны быть уникальными");
             return "addInsurance";
         }
 
@@ -60,34 +69,15 @@ public class InsuranceController {
         return "redirect:/";
     }
 
-    // Вывод формы для редактирования организации
-    @GetMapping("/edit-insurance/{id}")
-    public String updateInsuranceForm(
-            @PathVariable("id") long id,
-            Model model
-    ) {
-        Insurance insurance = insuranceRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("Пользователь с id:" + id + " отсутствует в системе"));
+    // Проверка на уникальность полей записи
+    private boolean checkUnique(Insurance insurance) {
 
-        model.addAttribute("insurance", insurance);
+        List<Insurance> insurances = insuranceRepository.findAllByInnOrOgrnOrName(
+                insurance.getInn(),
+                insurance.getOgrn(),
+                insurance.getName()
+        );
 
-        return "updateInsurance";
-    }
-
-    // Проверка формы и сохранение отредактированной организации в БД
-    @PostMapping("/update-insurance/{id}")
-    public String updateInsurance(
-            @PathVariable("id") long id,
-            @Valid Insurance insurance,
-            BindingResult result
-    ) {
-        if (result.hasErrors()) {
-            insurance.setId(id);
-            return "updateInsurance";
-        }
-
-        insuranceRepository.save(insurance);
-
-        return "redirect:/";
+        return insurances.size() > 0;
     }
 }

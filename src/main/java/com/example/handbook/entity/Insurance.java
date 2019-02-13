@@ -1,18 +1,15 @@
 package com.example.handbook.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
 public class Insurance {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "[0-9]{10}|[0-9]{12}]", message = "Должно быть 10 или 12 цифр")
+    @Pattern(regexp = "[0-9]{12}|[0-9]{10}", message = "Должно быть 10 или 12 цифр")
     private String inn;
 
     @Pattern(regexp = "[0-9]{13}", message = "Должно быть 13 цифр")

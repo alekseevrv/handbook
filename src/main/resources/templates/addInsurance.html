@@ -11,22 +11,29 @@
         [<a th:href="@{/}"> Главная </a>]
 </div><br>
 
+<div th:if="${errorUnique}">
+    <span th:text="${errorUnique}"></span>
+</div><br>
+
 <div>
     <form method="post" th:action="@{/add-insurance}" th:object="${insurance}">
 
-        <input type="text" th:field="*{inn}" placeholder="ИНН">
+        <label>ИНН</label>
+        <input type="text" th:field="*{inn}">
         <span th:if="${#fields.hasErrors('inn')}" th:errors="*{inn}"></span> <br><br>
 
-        <input type="text" th:field="*{ogrn}" placeholder="ОГРН">
+        <label>ОГРН</label>
+        <input type="text" th:field="*{ogrn}">
         <span th:if="${#fields.hasErrors('ogrn')}" th:errors="*{ogrn}"></span> <br><br>
 
-        <input type="text" th:field="*{name}" placeholder="Название организации">
+        <label>Название</label>
+        <input type="text" th:field="*{name}">
         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span> <br><br>
 
-        <input type="text" th:field="*{adres}" placeholder="Адрес организации">
+        <label>Адрес</label>
+        <input type="text" th:field="*{adres}">
         <span th:if="${#fields.hasErrors('adres')}" th:errors="*{adres}"></span> <br><br>
 
-        <input type="reset" value="Очистить">
         <button type="submit" class="btn btn-primary">Добавить</button>
     </form>
 </div>
