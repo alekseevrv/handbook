@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class InsuranceController {
@@ -72,12 +76,42 @@ public class InsuranceController {
     // Проверка на уникальность полей записи
     private boolean checkUnique(Insurance insurance) {
 
-        List<Insurance> insurances = insuranceRepository.findAllByInnOrOgrnOrName(
+        List<Insurance> insurances = insuranceRepository.findByInnOrOgrnOrName(
                 insurance.getInn(),
                 insurance.getOgrn(),
                 insurance.getName()
         );
 
         return insurances.size() > 0;
+    }
+
+    // Вывод формы поиска организаций
+    @GetMapping("/search-insurance")
+    public String searchInsuranceForm() {
+
+        return "searchInsurance";
+    }
+
+    // Поиск организаций и вывод результата поиска
+    @PostMapping("/search-insurance")
+    public String searchInsurance(
+            @RequestParam Map<String, String> form,
+            Model model
+    ) {
+        if (
+                !form.get("inn").equals("") || !form.get("ogrn").equals("") ||
+                !form.get("name").equals("") || !form.get("adres").equals("")
+        ) {
+            Iterable<Insurance> insurances = insuranceRepository.findByInnLikeAndOgrnLikeAndNameLikeAndAdresLike(
+                    "%" + form.get("inn") + "%",
+                    "%" + form.get("ogrn") + "%",
+                    "%" + form.get("name") + "%",
+                    "%" + form.get("adres") + "%"
+            );
+
+            model.addAttribute("insurances", insurances);
+        }
+
+        return "searchInsurance";
     }
 }

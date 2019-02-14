@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Поиск</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<div>
+    Поиск страховой организации -
+        [<a th:href="@{/}"> Главная </a>]
+</div><br>
+
+<div>
+    <form method="post" th:action="@{/search-insurance}">
+
+        <label>ИНН</label>
+        <input type="text" name="inn"> <br><br>
+
+        <label>ОГРН</label>
+        <input type="text" name="ogrn"> <br><br>
+
+        <label>Название</label>
+        <input type="text" name="name"> <br><br>
+
+        <label>Адрес</label>
+        <input type="text" name="adres"> <br><br>
+
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+</div> <br>
+
+<div th:if="${insurances}">
+    <div th:unless="${insurances.isEmpty()}">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>ИНН</th>
+                <th>ОГРН</th>
+                <th>Наименование</th>
+                <th>Адрес</th>
+            </tr>
+            <tr th:each="insurance : ${insurances}">
+                <td th:text="${insurance.id}"></td>
+                <td th:text="${insurance.inn}"></td>
+                <td th:text="${insurance.ogrn}"></td>
+                <td th:text="${insurance.name}"></td>
+                <td th:text="${insurance.adres}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
